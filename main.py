@@ -4,8 +4,11 @@ from pyramid.config import Configurator
 if __name__ == '__main__':
     config = Configurator()
     config.add_renderer(name='.html', factory='renderers.jinja2_renderer.Jinja2Renderer')
+    
     config.add_route('hello', '/hello/{name}')
+    
     config.scan('views')
+    
     app = config.make_wsgi_app()
     server = make_server('0.0.0.0', 8084, app)
     server.serve_forever()
