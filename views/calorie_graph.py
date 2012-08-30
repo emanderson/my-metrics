@@ -1,3 +1,5 @@
+import csv
+
 from datetime import date
 from datetime import timedelta
 
@@ -6,6 +8,7 @@ from pyramid.httpexceptions import HTTPFound
 
 from tables.food_entry import FoodEntry
 from tables import Session
+from utils.lose_it_data_reader import LoseItDataReader
 
 @view_config(route_name='calorie-graph', renderer='calorie_graph.html')
 def calorie_graph(request):
@@ -27,3 +30,20 @@ def food_entry_add(request):
     session.commit()
     
     return HTTPFound('/food_entry/add_form')
+
+@view_config(route_name='lose-it-upload-form', renderer='lose_it_upload.html')
+def lose_it_upload_form(request):
+    return {'title': 'Upload LoseIt Data'}
+
+@view_config(route_name='lose-it-upload')
+def lose_it_upload(request):
+    session = Session()
+    
+    input_file = request.POST['file'].file
+    reader = LoseItDataReader(input_file)
+    for entry in reader:
+        new_entry = FoodEntry(entry.name, entry.calories, entry.date)
+        session.add(new_entry)
+    
+    session.commit()
+    return HTTPFound('/food_entry/lose_it_upload_form')

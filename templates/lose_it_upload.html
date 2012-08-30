@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+    <form action="/food_entry/lose_it_upload" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+        <fieldset>
+            <label for="file">Weekly Summary File:</label><input type="file" id="file" name="file" />
+            <input type="submit" id="upload" name="upload" value="Upload" />
+        </fieldset>
+    </form>
+{% endblock %}
