@@ -20,6 +20,8 @@ Setup Dependencies
     c. (Optional) Install pgAdmin3 (http://www.postgresql.org/ftp/pgadmin3/release/v1.14.3/osx/)
 5. Install SQLAlchemy (http://docs.sqlalchemy.org/en/latest/intro.html#installation)
     a. ``<virtualenv dir>/bin/easy_install SQLAlchemy``
+6. Install psycopg (http://initd.org/psycopg/install/)
+    a. ``<virtualenv dir>/bin/easy_install psycopg2``
 6. (Optional) Install Docutils (http://docutils.sourceforge.net/)
     a. ``<virtualenv dir>/bin/easy_install docutils``
     

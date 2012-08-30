@@ -18,17 +18,14 @@ html, body {
 
 header {
     padding: 10px;
-    background: red;
 }
 
 #pageContent {
     padding: 10px;
     padding-bottom: 45px;
-    background: blue;
 }
 
 footer {
-    background: green;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -41,6 +38,8 @@ footer {
 
 header, footer {
     font-size: 15px;
+    color: #ffffff;
+    background: #47a5f4;
 }
 
 /* HEADINGS */
