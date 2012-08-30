@@ -1,8 +1,13 @@
 import os
 from wsgiref.simple_server import make_server
 from pyramid.config import Configurator
+from sqlalchemy import create_engine
+from tables import Session
 
 if __name__ == '__main__':
+    engine = create_engine('postgresql://emily@0.0.0.0/my_metrics')
+    Session.configure(bind=engine)
+
     config = Configurator()
     config.add_renderer(name='.html', factory='renderers.jinja2_renderer.Jinja2Renderer')
     
