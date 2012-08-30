@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <link rel='stylesheet' type='text/css' href='/css/reset.css' />
+        <link rel='stylesheet' type='text/css' href='/css/main.css' />
+    </head>
+    <body>
+        <div id='wholePage'>
+            <header>
+                Header
+            </header>
+            <div id='pageContent'>
+                <h1>{{ title }}</h1>
+                {% block page_content %}
+                {% endblock %}
+            </div>
+            <footer>
+                <div id="footerInner">
+                    Footer
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

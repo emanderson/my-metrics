@@ -1,3 +1,4 @@
+import os
 from wsgiref.simple_server import make_server
 from pyramid.config import Configurator
 
@@ -6,6 +7,9 @@ if __name__ == '__main__':
     config.add_renderer(name='.html', factory='renderers.jinja2_renderer.Jinja2Renderer')
     
     config.add_route('hello', '/hello/{name}')
+    config.add_route('calorie-graph', '/graph')
+    
+    config.add_static_view('css', 'css')
     
     config.scan('views')
     
