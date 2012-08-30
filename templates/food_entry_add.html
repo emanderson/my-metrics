@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+    <form action="/food_entry/add" method="POST">
+        <fieldset>
+            <label for="name">Name:</label><input type="text" id="name" name="name" />
+            <label for="calories">Calories:</label><input type="text" id="calories" name="calories" />
+            <label for="days_ago">Days Ago:</label><input type="text" id="days_ago" name="days_ago" />
+            <input type="submit" id="save" name="save" value="Save" />
+        </fieldset>
+    </form>
+{% endblock %}

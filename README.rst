@@ -38,3 +38,8 @@ Running Development Database
     - Host: ``localhost``
     - Port: ``5432``
     - User: ``<your username>``
+
+Setting Up a New Database
+=========================
+
+``<virtualenv dir>/bin/python setup_database.py``
