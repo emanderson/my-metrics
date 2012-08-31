@@ -12,7 +12,8 @@ from utils.lose_it_data_reader import LoseItDataReader
 
 @view_config(route_name='calorie-graph', renderer='calorie_graph.html')
 def calorie_graph(request):
-    return {'title': 'Calorie Graph'}
+    session = Session()
+    return {'title': 'Calorie Graph', 'food_entries': session.query(FoodEntry).order_by(FoodEntry.date)}
 
 @view_config(route_name='food-entry-add-form', renderer='food_entry_add.html')
 def food_entry_add_form(request):

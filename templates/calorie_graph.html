@@ -2,4 +2,10 @@
 
 {% block page_content %}
     Graph here.
+    
+    <ul>
+        {% for entry in food_entries %}
+            <li>{{ entry.name }}: {{ entry.calories }} on {{ entry.date }}</li>
+        {% endfor %}
+    </ul>
 {% endblock %}
