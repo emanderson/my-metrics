@@ -4,8 +4,8 @@
     Graph here.
     
     <ul>
-        {% for entry in food_entries %}
-            <li>{{ entry.name }}: {{ entry.calories }} on {{ entry.date }}</li>
+        {% for day in food_days %}
+            <li>{{ day.date }}: {{ day.total_calories() }}</li>
         {% endfor %}
     </ul>
 {% endblock %}
