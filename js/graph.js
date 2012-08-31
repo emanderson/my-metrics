@@ -9,11 +9,40 @@ var CalorieGrapher = function() {
             context.lineTo(790, 390);
             context.stroke();
         } else {
-            log.console('No canvas support');
+            console.log('No canvas support');
         }    
     };
     
+    var barColors = [
+        '#474ff4',
+        '#f447d8',
+        '#dc6740',
+        '#c39d39',
+        '#b0c339',
+        '#3cd0aa',
+        '#9947f4',
+        '#f4475d',
+        '#c38139',
+        '#c3b939',
+        '#5ec339'
+    ];
+    var lastColor = 0;
+    
     var bars = [];
+    
+    function drawBarPart(context, left, top, right, bottom) {
+        var color = barColors[lastColor];
+        lastColor = (lastColor + 1) % barColors.length;
+        context.fillStyle = color;
+        context.strokeColor = color;
+        context.beginPath()
+        context.moveTo(left, top);
+        context.lineTo(left, bottom);
+        context.lineTo(right, bottom);
+        context.lineTo(right, top);
+        context.closePath();
+        context.fill();
+    };
     
     function drawBar(dayData, maxBarPercent, barPosition) {
         var barLeft = barPosition * 30 + 20;
@@ -29,17 +58,17 @@ var CalorieGrapher = function() {
         bars.push(bar);
         if (canvas.getContext) {
             var context = canvas.getContext('2d');
-            context.fillColor = '#000000';
-            context.strokeColor = '#000000';
-            context.beginPath()
-            context.moveTo(bar.left, bar.top);
-            context.lineTo(bar.left, bar.bottom);
-            context.lineTo(bar.right, bar.bottom);
-            context.lineTo(bar.right, bar.top);
-            context.closePath();
-            context.fill();
+            var bottom = bar.bottom;
+            var top = bar.bottom;
+            var height = 0;
+            for (var i=0; i<bar.day.entries.length; i++) {
+                height = bar.day.entries[i].calories/bar.day.total_calories*barHeight;
+                top -= height;
+                drawBarPart(context, bar.left, top, bar.right, bottom);
+                bottom -= height;
+            }
         } else {
-            log.console('No canvas support');
+            console.log('No canvas support');
         }    
     };
     
