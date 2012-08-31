@@ -1,6 +1,12 @@
 import csv
 from datetime import datetime
 
+IGNORED_TYPES = ['Exercise']
+NAME_HEADER = 'Name'
+CALORIES_HEADER = 'Calories'
+DATE_HEADER = 'Date'
+TYPE_HEADER = 'Type'
+
 class LoseItEntry(object):
     def __init__(self, name, calories_str, date_str):
         self.name = name
@@ -15,15 +21,20 @@ class LoseItDataReader(object):
         self.csv_file = csv_file
         self.csv_reader = csv.reader(self.csv_file, delimiter=',', quotechar='"')
         self.headers = self.csv_reader.next()
-        self.name_index = self._find_index('Name')
-        self.calories_index = self._find_index('Calories')
-        self.date_index = self._find_index('Date')
+        self.name_index = self._find_index(NAME_HEADER)
+        self.calories_index = self._find_index(CALORIES_HEADER)
+        self.date_index = self._find_index(DATE_HEADER)
+        self.type_index = self._find_index(TYPE_HEADER)
     
     def __iter__(self):
         return self
     
     def next(self):
         row_data = self.csv_reader.next()
+        
+        if not self.type_index is None:
+            while row_data and row_data[self.type_index] in IGNORED_TYPES:
+                row_data = self.csv_reader.next()
         
         name = ''
         if not self.name_index is None:
