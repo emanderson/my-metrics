@@ -1,12 +1,19 @@
 var CalorieGrapher = function() {
+    var AXES_HEIGHT = 390;
+    var AXES_WIDTH = 790;
+    var AXES_OFFSET = 10;
+    var MAX_BAR_HEIGHT = 380;
+    var BAR_WIDTH = 35;
+    var BAR_SPACE = 15;
+
     function drawAxes() {
         var canvas = document.getElementById('calorieGraph');
         if (canvas.getContext) {
             var context = canvas.getContext('2d');
             context.strokeColor = '#000000';
-            context.moveTo(10, 10);
-            context.lineTo(10, 390);
-            context.lineTo(790, 390);
+            context.moveTo(AXES_OFFSET, AXES_OFFSET);
+            context.lineTo(AXES_OFFSET, AXES_HEIGHT);
+            context.lineTo(AXES_WIDTH, AXES_HEIGHT);
             context.stroke();
         } else {
             console.log('No canvas support');
@@ -45,14 +52,14 @@ var CalorieGrapher = function() {
     };
     
     function drawBar(dayData, maxBarPercent, barPosition) {
-        var barLeft = barPosition * 30 + 20;
-        var barHeight = maxBarPercent * 380;
+        var barLeft = barPosition * (BAR_WIDTH + BAR_SPACE) + BAR_SPACE + AXES_OFFSET;
+        var barHeight = maxBarPercent * MAX_BAR_HEIGHT;
         var canvas = document.getElementById('calorieGraph');
         var bar = {
             left: barLeft,
-            top: 390-barHeight,
-            right: barLeft+20,
-            bottom: 390,
+            top: AXES_HEIGHT-barHeight,
+            right: barLeft + BAR_SPACE * 2,
+            bottom: AXES_HEIGHT,
             day: dayData
         };
         bars.push(bar);
