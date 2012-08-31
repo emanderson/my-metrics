@@ -5,6 +5,13 @@ class FoodDay(object):
     
     def total_calories(self):
         return sum(map(lambda x: x.calories, self.food_entries))
+    
+    def to_dict(self):
+        return {
+            'date': self.date.strftime('%Y%m%d'),
+            'entries': map(lambda x: x.to_dict(), self.food_entries),
+            'total_calories': self.total_calories()
+        }
         
     # ASSUMES ENTRIES FROM THE SAME DAY ARE GROUPED
     @classmethod

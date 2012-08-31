@@ -17,6 +17,13 @@ def calorie_graph(request):
     food_entries = session.query(FoodEntry).order_by(FoodEntry.date)
     food_days = FoodDay.group_days(food_entries)
     return {'title': 'Calorie Graph', 'food_entries': food_entries, 'food_days': food_days}
+    
+@view_config(route_name='calorie-graph-data', renderer='json')
+def calorie_graph_data(request):
+    session = Session()
+    food_entries = session.query(FoodEntry).order_by(FoodEntry.date)
+    food_days = FoodDay.group_days(food_entries)
+    return {'food_days': map(lambda x: x.to_dict(), food_days)}
 
 @view_config(route_name='food-entry-add-form', renderer='food_entry_add.html')
 def food_entry_add_form(request):

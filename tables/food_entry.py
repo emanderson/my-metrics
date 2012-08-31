@@ -16,5 +16,11 @@ class FoodEntry(Base):
     
     def __repr__(self):
         return "<FoodEntry('%s','%s','%s')>" % (self.name, self.calories, self.date)
+    
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'calories': self.calories
+        }
 
     
