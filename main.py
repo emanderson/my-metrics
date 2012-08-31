@@ -19,6 +19,7 @@ if __name__ == '__main__':
     config.add_route('lose-it-upload', '/food_entry/lose_it_upload', request_method='POST')
     
     config.add_static_view('css', 'css')
+    config.add_static_view('js', 'js')
     
     config.scan('views')
     

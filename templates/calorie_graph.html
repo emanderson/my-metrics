@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
 {% block page_content %}
-    Graph here.
+    <canvas id="calorieGraph" width="800" height="400">
+        Sorry, your browser doesn't support canvas.
+    </canvas>
     
     <ul>
         {% for day in food_days %}
