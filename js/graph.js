@@ -62,16 +62,24 @@ var CalorieGrapher = function() {
             bottom: AXES_HEIGHT,
             day: dayData
         };
-        bars.push(bar);
         if (canvas.getContext) {
             var context = canvas.getContext('2d');
             var bottom = bar.bottom;
             var top = bar.bottom;
             var height = 0;
             for (var i=0; i<bar.day.entries.length; i++) {
-                height = bar.day.entries[i].calories/bar.day.total_calories*barHeight;
+                var entry = bar.day.entries[i];
+                height = entry.calories/bar.day.total_calories*barHeight;
                 top -= height;
                 drawBarPart(context, bar.left, top, bar.right, bottom);
+                bars.push({
+                    left: bar.left,
+                    top: top,
+                    right: bar.right,
+                    bottom: bottom,
+                    day: bar.day,
+                    entry: entry
+                });
                 bottom -= height;
             }
         } else {
@@ -121,7 +129,9 @@ var CalorieGrapher = function() {
             $('#pageContent').append('<div id="graphMouseOver"></div>');
             mouseOver = $('#graphMouseOver');
         }
-        mouseOver.text(bar.day.date + ': ' + bar.day.total_calories);
+        //mouseOver.text(bar.day.date + ': ' + bar.day.total_calories);
+        mouseOver.html('<p>' + bar.day.date + '</p>' + 
+            '<p>' + bar.entry.name + ': ' + bar.entry.calories + '</p>');
         mouseOver.css('left', event.pageX);
         mouseOver.css('top', event.pageY);
         mouseOver.show();
