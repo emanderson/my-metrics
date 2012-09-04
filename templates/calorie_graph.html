@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block extra_css %}
+    <link rel='stylesheet' type='text/css' href='/css/graph.css' />
+{% endblock %}
+
 {% block page_content %}
     <canvas id="calorieGraph" width="800" height="400">
         Sorry, your browser doesn't support canvas.

@@ -16,6 +16,10 @@ def calorie_graph(request):
             'reset.css',
             'main.css'
         ]
+    elif name == 'graph':
+        files_to_join = [
+            'graph.css'
+        ]
     else:
         return HTTPNotFound('File %s.css does not exist' % name)
     content = ''

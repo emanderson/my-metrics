@@ -1,0 +1,9 @@
+/* GRAPH */
+
+.graphMouseOver {
+    position: absolute;
+    border: 1px solid black;
+    background: white;
+    padding: 2px;
+    font-size: 12px;
+}

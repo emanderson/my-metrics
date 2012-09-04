@@ -11,6 +11,8 @@ html, body {
     height: 100%;
 }
 
+/* MAIN SHARED STYLES */
+
 .wholePage {
     min-height: 100%;
     position: relative;
@@ -42,19 +44,6 @@ header, footer {
     background: #47a5f4;
 }
 
-/* HEADINGS */
-
 h1 {
     font-size: 20px;
 }
-
-/* GRAPH */
-
-.graphMouseOver {
-    position: absolute;
-    border: 1px solid black;
-    background: white;
-    padding: 2px;
-    font-size: 12px;
-}
-
