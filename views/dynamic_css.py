@@ -15,7 +15,8 @@ def calorie_graph(request):
         files_to_join = [
             'reset.css',
             'main.css',
-            'tables.css'
+            'tables.css',
+            'buttons.css'
         ]
     elif name == 'graph':
         files_to_join = [
@@ -30,6 +31,6 @@ def calorie_graph(request):
     content = ''
     for filename in files_to_join:
         f = file('css/' + filename, 'r')
-        content += f.read() + '\n'
+        content += f.read() + '\n\n'
         f.close()
     return Response(content, content_type='text/css')

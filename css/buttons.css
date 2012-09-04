@@ -1,0 +1,10 @@
+/* BUTTONS */
+
+.button {
+    background: #47a5f4;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 4px 6px;
+    text-decoration: none;
+    font-size: 14px;
+}

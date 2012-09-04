@@ -1,3 +1,5 @@
+/* MAIN SHARED STYLES */
+
 body {
     font-family: Verdana, Arial, sans-serif;
 }
@@ -10,8 +12,6 @@ html, body {
     padding: 0;
     height: 100%;
 }
-
-/* MAIN SHARED STYLES */
 
 .wholePage {
     min-height: 100%;
