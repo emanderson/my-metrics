@@ -21,6 +21,7 @@ if __name__ == '__main__':
     
     config.add_route('dynamic-css', '/css/{name}.css')
     
+    # TODO: do dynamic file merging for JS like CSS
     config.add_static_view('js', 'js')
     
     config.scan('views')
