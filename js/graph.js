@@ -126,7 +126,7 @@ var CalorieGrapher = function() {
     
     function showMouseOverForBar(bar, event) {
         if (!mouseOver) {
-            $('#pageContent').append('<div id="graphMouseOver"></div>');
+            $('#pageContent').append('<div id="graphMouseOver" class="graphMouseOver"></div>');
             mouseOver = $('#graphMouseOver');
         }
         //mouseOver.text(bar.day.date + ': ' + bar.day.total_calories);

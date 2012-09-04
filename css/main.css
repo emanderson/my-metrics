@@ -11,7 +11,7 @@ html, body {
     height: 100%;
 }
 
-#wholePage {
+.wholePage {
     min-height: 100%;
     position: relative;
 }
@@ -20,7 +20,7 @@ header {
     padding: 10px;
 }
 
-#pageContent {
+.pageContent {
     padding: 10px;
     padding-bottom: 45px;
 }
@@ -32,7 +32,7 @@ footer {
     height: 35px;
 }
 
-#footerInner {
+.footerInner {
     padding: 10px;
 }
 
@@ -50,7 +50,7 @@ h1 {
 
 /* GRAPH */
 
-#graphMouseOver {
+.graphMouseOver {
     position: absolute;
     border: 1px solid black;
     background: white;
