@@ -1,0 +1,13 @@
+/* ENTRIES */
+
+th.foodNames {
+    width: 500px
+}
+
+th.calories {
+    width: 100px;
+}
+
+td.calories {
+    text-align: center;
+}

@@ -1,0 +1,18 @@
+/* TABLES */
+
+th {
+    background: #47a5f4;
+    color: #ffffff;
+}
+
+th, td {
+    padding: 5px;
+}
+
+tr:nth-of-type(odd) {
+    background: #dddddd;
+}
+
+table {
+    margin-bottom: 10px;
+}

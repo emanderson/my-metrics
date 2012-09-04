@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+    <link rel='stylesheet' type='text/css' href='/css/entries.css' />
+{% endblock %}
+
+{% block page_content %}
+    {% for day in food_days %}
+        <h2>{{ day.date }}</h2>
+        <table>
+            <tr>
+                <th class="foodNames">Name</th>
+                <th class="calories">Calories</th>
+            </tr>
+            {% for entry in day.food_entries %}
+                <tr>
+                    <td>{{ entry.name }}</td>
+                    <td class="calories">{{ entry.calories }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+{% endblock %}

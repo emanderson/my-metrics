@@ -42,6 +42,13 @@ def food_entry_add(request):
     
     return HTTPFound('/food_entry/add_form')
 
+@view_config(route_name='food-entry-list', renderer='food_entry_list.html')
+def food_entry_list(request):
+    session = Session()
+    food_entries = session.query(FoodEntry).order_by(FoodEntry.date)
+    food_days = FoodDay.group_days(food_entries)
+    return {'title': 'Food Entries', 'food_entries': food_entries, 'food_days': food_days}
+
 @view_config(route_name='lose-it-upload-form', renderer='lose_it_upload.html')
 def lose_it_upload_form(request):
     return {'title': 'Upload LoseIt Data'}
