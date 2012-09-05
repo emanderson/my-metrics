@@ -1,13 +1,18 @@
-from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy import Column, Integer, String, Date, ForeignKey
+from sqlalchemy.orm import relationship, backref
 from tables import Base
+from tables.food import Food
 
 class FoodEntry(Base):
     __tablename__ = 'food_entry'
     
     id = Column(Integer, primary_key=True)
+    food_id = Column(Integer, ForeignKey('food.id'))
     name = Column(String)
     calories = Column(Integer)
     date = Column(Date)
+    
+    food = relationship("Food", backref=backref('food_entries', order_by=date))
     
     def __init__(self, name, calories, date):
         self.name = name
@@ -15,11 +20,12 @@ class FoodEntry(Base):
         self.date = date
     
     def __repr__(self):
-        return "<FoodEntry('%s','%s','%s')>" % (self.name, self.calories, self.date)
+        return "<FoodEntry('%s','%s','%s')>" % (self.food.name, self.calories, self.date)
     
+    # TODO: name -> food dict
     def to_dict(self):
         return {
-            'name': self.name,
+            'name': self.food.name,
             'calories': self.calories
         }
 
