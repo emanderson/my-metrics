@@ -14,8 +14,9 @@ class FoodEntry(Base):
     
     food = relationship("Food", backref=backref('food_entries', order_by=date))
     
-    def __init__(self, name, calories, date):
-        self.name = name
+    def __init__(self, food, calories, date):
+        self.name = food.name
+        self.food = food
         self.calories = calories
         self.date = date
     

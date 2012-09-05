@@ -35,8 +35,15 @@ def food_entry_add(request):
     calories = int(request.params['calories'])
     day = date.today() - timedelta(int(request.params['days_ago']))
     
-    new_entry = FoodEntry(name, calories, day)
     session = Session()
+    existing_food = session.query(Food).filter_by(name=food_name).all()
+    food = None
+    if len(existing_food) == 0:
+        food = Food(food_name)
+        session.add(food)
+    else:
+        food = existing_food[0]
+    new_entry = FoodEntry(food, calories, day)
     session.add(new_entry)
     session.commit()
     
@@ -60,7 +67,14 @@ def lose_it_upload(request):
     input_file = request.POST['file'].file
     reader = LoseItDataReader(input_file)
     for entry in reader:
-        new_entry = FoodEntry(entry.name, entry.calories, entry.date)
+        existing_food = session.query(Food).filter_by(name=entry.name).all()
+        food = None
+        if len(existing_food) == 0:
+            food = Food(food_name)
+            session.add(food)
+        else:
+            food = existing_food[0]
+        new_entry = FoodEntry(food, entry.calories, entry.date)
         session.add(new_entry)
     
     session.commit()

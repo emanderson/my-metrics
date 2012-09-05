@@ -14,7 +14,7 @@
             </tr>
             {% for entry in day.food_entries %}
                 <tr>
-                    <td>{{ entry.name }}</td>
+                    <td>{{ entry.food.name }}</td>
                     <td class="calories">{{ entry.calories }}</td>
                 </tr>
             {% endfor %}
