@@ -22,7 +22,9 @@ Setup Dependencies
     a. ``<virtualenv dir>/bin/easy_install SQLAlchemy``
 6. Install psycopg (http://initd.org/psycopg/install/)
     a. ``<virtualenv dir>/bin/easy_install psycopg2``
-6. (Optional) Install Docutils (http://docutils.sourceforge.net/)
+7. Install sqlalchemy-migrate  (http://sqlalchemy-migrate.readthedocs.org/en/v0.7.2/download.html)
+    a. ``<virtualenv dir>/bin/easy_install sqlalchemy-migrate``
+8. (Optional) Install Docutils (http://docutils.sourceforge.net/)
     a. ``<virtualenv dir>/bin/easy_install docutils``
     
 Running Development Server
@@ -42,4 +44,8 @@ Running Development Database
 Setting Up a New Database
 =========================
 
-``<virtualenv dir>/bin/python setup_database.py``
+1. Add your database to migration repository (http://sqlalchemy-migrate.readthedocs.org/en/v0.7.2/versioning.html#version-control-a-database):
+    a. ``<virtualenv dir>/bin/python migration_repo/manage.py version_control <database URL> migration_repo/``
+2. Update ``manage_db.py`` to reflect your database settings
+3. Upgrade to latest version:
+    a. ``<virtualenv dir>/bin/python manage_db.py upgrade``
