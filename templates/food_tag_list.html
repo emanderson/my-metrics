@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+    <!-- link rel='stylesheet' type='text/css' href='/css/entries.css' /-->
+{% endblock %}
+
+{% block page_content %}
+    <table>
+        <tr>
+            <th>Name</th>
+        </tr>
+        {% for tag in food_tags %}
+            <tr>
+                <td>{{ tag.name }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    
+    <a class="button" href="/food_tag/add_form">Add a Food Tag</a>
+{% endblock %}
