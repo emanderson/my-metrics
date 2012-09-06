@@ -11,7 +11,7 @@ class FoodTag(Base):
         self.name = name
     
     def __repr__(self):
-        return "<Food('%s')>" % (self.name)
+        return "<FoodTag('%s')>" % (self.name)
     
     def to_dict(self):
         return {
