@@ -6,6 +6,7 @@ from datetime import timedelta
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 
+from tables.food import Food
 from tables.food_entry import FoodEntry
 from tables import Session
 from utils.lose_it_data_reader import LoseItDataReader
@@ -16,6 +17,7 @@ def calorie_graph(request):
     session = Session()
     food_entries = session.query(FoodEntry).order_by(FoodEntry.date)
     food_days = FoodDay.group_days(food_entries)
+    session.close()
     return {'title': 'Calorie Graph', 'food_entries': food_entries, 'food_days': food_days}
     
 @view_config(route_name='calorie-graph-data', renderer='json')
@@ -23,6 +25,7 @@ def calorie_graph_data(request):
     session = Session()
     food_entries = session.query(FoodEntry).order_by(FoodEntry.date)
     food_days = FoodDay.group_days(food_entries)
+    session.close()
     return {'food_days': map(lambda x: x.to_dict(), food_days)}
 
 @view_config(route_name='food-entry-add-form', renderer='food_entry_add.html')
@@ -54,6 +57,7 @@ def food_entry_list(request):
     session = Session()
     food_entries = session.query(FoodEntry).order_by(FoodEntry.date)
     food_days = FoodDay.group_days(food_entries)
+    session.close()
     return {'title': 'Food Entries', 'food_entries': food_entries, 'food_days': food_days}
 
 @view_config(route_name='lose-it-upload-form', renderer='lose_it_upload.html')
@@ -64,13 +68,14 @@ def lose_it_upload_form(request):
 def lose_it_upload(request):
     session = Session()
     
+    # TODO: duplicate detection
     input_file = request.POST['file'].file
     reader = LoseItDataReader(input_file)
     for entry in reader:
         existing_food = session.query(Food).filter_by(name=entry.name).all()
         food = None
         if len(existing_food) == 0:
-            food = Food(food_name)
+            food = Food(entry.name)
             session.add(food)
         else:
             food = existing_food[0]

@@ -8,14 +8,12 @@ class FoodEntry(Base):
     
     id = Column(Integer, primary_key=True)
     food_id = Column(Integer, ForeignKey('food.id'))
-    name = Column(String)
     calories = Column(Integer)
     date = Column(Date)
     
-    food = relationship("Food", backref=backref('food_entries', order_by=date))
+    food = relationship("Food", backref=backref('food_entries', order_by=date), lazy='joined')
     
     def __init__(self, food, calories, date):
-        self.name = food.name
         self.food = food
         self.calories = calories
         self.date = date
