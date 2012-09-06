@@ -44,8 +44,8 @@ Running Development Database
 Setting Up a New Database
 =========================
 
-1. Add your database to migration repository (http://sqlalchemy-migrate.readthedocs.org/en/v0.7.2/versioning.html#version-control-a-database):
+1. Add your database to migration repository (http://sqlalchemy-migrate.readthedocs.org/en/v0.7.2/versioning.html#version-control-a-database)
     a. ``<virtualenv dir>/bin/python migration_repo/manage.py version_control <database URL> migration_repo/``
 2. Update ``manage_db.py`` to reflect your database settings
-3. Upgrade to latest version:
+3. Upgrade to latest version
     a. ``<virtualenv dir>/bin/python manage_db.py upgrade``
