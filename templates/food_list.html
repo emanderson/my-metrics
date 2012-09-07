@@ -8,10 +8,18 @@
     <table>
         <tr>
             <th>Name</th>
+            <th>Tags</th>
         </tr>
         {% for food in foods %}
             <tr>
                 <td>{{ food.name }}</td>
+                <td>
+                    {% if food.food_tags %}
+                        <a href="/food/{{ food.id }}/food_tags/edit_form">{{ food.food_tags | join(', ', attribute='name') }}</a>
+                    {% else %}
+                        <a href="/food/{{ food.id }}/food_tags/edit_form">Add tags</a>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </table>

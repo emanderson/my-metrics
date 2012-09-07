@@ -33,3 +33,32 @@ def food_tag_add(request):
     session.commit()
     
     return HTTPFound('/food_tag/list')
+
+@view_config(route_name='food-edit-food-tags-form', renderer='food_edit_food_tags_form.html')
+def food_edit_food_tags_form(request):
+    session = Session()
+    food = session.query(Food).filter_by(id=request.matchdict['id']).first()
+    food_tags = session.query(FoodTag).order_by(FoodTag.name).all()
+    session.close()
+    return {'title': 'Edit Tags for %s' % food.name, 'food': food, 'tags': food_tags}
+
+@view_config(route_name='food-edit-food-tags')
+def food_edit_food_tags(request):
+    food_id = request.matchdict['id']
+    tag_ids = map(int, request.params.getall('tag_id'))
+    session = Session()
+    food = session.query(Food).filter_by(id=food_id).first()
+    already_tagged = []
+    to_remove = []
+    for food_tag in food.food_tags:
+        if not food_tag.id in tag_ids:
+            to_remove.append(food_tag)
+        else:
+            already_tagged.append(food_tag.id)
+    for tag in to_remove:
+        food.food_tags.remove(tag)
+    to_add = session.query(FoodTag).filter(FoodTag.id.in_(set(tag_ids)-set(already_tagged))).all()
+    food.food_tags.extend(to_add)
+    session.commit()
+    
+    return HTTPFound('/food/list')

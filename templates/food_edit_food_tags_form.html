@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+    <form action="/food/{{ food.id }}/food_tags/edit" method="POST">
+        <fieldset>
+            {% for tag in tags %}
+                <input type="checkbox" name="tag_id" value="{{ tag.id }}" />{{ tag.name }}<br />
+            {% endfor %}
+            <input type="submit" id="save" name="save" value="Save" />
+        </fieldset>
+    </form>
+{% endblock %}
