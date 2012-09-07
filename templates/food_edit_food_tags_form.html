@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% if not request.is_xhr %}{% extends "base.html" %}{% endif -%}
 
 {% block page_content %}
     <form action="/food/{{ food.id }}/food_tags/edit" method="POST">

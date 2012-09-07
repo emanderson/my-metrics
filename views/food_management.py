@@ -40,7 +40,8 @@ def food_edit_food_tags_form(request):
     food = session.query(Food).filter_by(id=request.matchdict['id']).first()
     food_tags = session.query(FoodTag).order_by(FoodTag.name).all()
     session.close()
-    return {'title': 'Edit Tags for %s' % food.name, 'food': food, 'tags': food_tags}
+    # TODO: find a way to auto-include request in every one of these...?
+    return {'request': request, 'title': 'Edit Tags for %s' % food.name, 'food': food, 'tags': food_tags}
 
 @view_config(route_name='food-edit-food-tags')
 def food_edit_food_tags(request):
