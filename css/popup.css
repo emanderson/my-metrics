@@ -1,0 +1,9 @@
+.popupForm {
+    background: #ffffff;
+    border: 1px solid #47a5f4;
+    border-radius: 5px;
+    padding: 5px; 
+    position: fixed;
+    top: 0;
+    left: 0;
+}

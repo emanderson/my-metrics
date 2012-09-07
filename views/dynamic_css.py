@@ -16,7 +16,8 @@ def calorie_graph(request):
             'reset.css',
             'main.css',
             'tables.css',
-            'buttons.css'
+            'buttons.css',
+            'popup.css'
         ]
     elif name == 'graph':
         files_to_join = [
