@@ -9,7 +9,7 @@ class FoodTag(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     
-    foods = relationship("Food", secondary='food_to_food_tag')
+    foods = relationship("Food", secondary='food_to_food_tag', lazy='joined')
     
     def __init__(self, name):
         self.name = name
