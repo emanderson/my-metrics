@@ -43,7 +43,7 @@ def food_edit_food_tags_form(request):
     # TODO: find a way to auto-include request in every one of these...?
     return {'request': request, 'title': 'Edit Tags for %s' % food.name, 'food': food, 'tags': food_tags}
 
-@view_config(route_name='food-edit-food-tags')
+@view_config(route_name='food-edit-food-tags', renderer='food_tags_for_food_td.html')
 def food_edit_food_tags(request):
     food_id = request.matchdict['id']
     tag_ids = map(int, request.params.getall('tag_id'))
@@ -61,5 +61,11 @@ def food_edit_food_tags(request):
     to_add = session.query(FoodTag).filter(FoodTag.id.in_(set(tag_ids)-set(already_tagged))).all()
     food.food_tags.extend(to_add)
     session.commit()
+    session = Session()
+    food = session.query(Food).filter_by(id=food_id).first()
+    session.close()
     
-    return HTTPFound('/food/list')
+    if request.is_xhr:
+        return {'request': request, 'food': food}
+    else:
+        return HTTPFound('/food/list')

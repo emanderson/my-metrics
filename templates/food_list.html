@@ -13,13 +13,7 @@
         {% for food in foods %}
             <tr>
                 <td>{{ food.name }}</td>
-                <td>
-                    {% if food.food_tags %}
-                        <a class="editOpener" href="/food/{{ food.id }}/food_tags/edit_form">{{ food.food_tags | join(', ', attribute='name') }}</a>
-                    {% else %}
-                        <a class="editOpener" href="/food/{{ food.id }}/food_tags/edit_form">Add tags</a>
-                    {% endif %}
-                </td>
+                {% include 'food_tags_for_food_td.html' %}
             </tr>
         {% endfor %}
     </table>
