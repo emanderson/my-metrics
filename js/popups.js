@@ -7,10 +7,15 @@ var Popuper = function() {
             $.ajax({
                 url: event.target.href,
                 success: function(html, status, jqXHR) {
-                    $('#pageContent').append('<div class="popupForm" id="popupForm"></div>');
+                    var pageContent = $('#pageContent');
+                    pageContent.append('<div class="popupForm" id="popupForm"></div>');
                     var popup = $('#popupForm');
                     popup.append(html);
-                    popup.css('top', topPos-popup.padding().top);
+                    var top = topPos;
+                    if (top + popup.height() > pageContent.height()) {
+                        top = pageContent.height() + pageContent.position().top - popup.height();
+                    }
+                    popup.css('top', top-popup.padding().top);
                     popup.css('left', leftPos-popup.padding().left);
                     form = popup.find('form')[0];
                     popup.on('click', 'input[name=save]', function() {
