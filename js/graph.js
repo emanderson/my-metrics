@@ -55,10 +55,13 @@ var CalorieGrapher = function() {
         context.fill();
     };
     
-    function drawBar(dayData, maxBarPercent, barPosition, mode) {
+    function drawBar(dayData, maxBarPercent, barPosition, displayMode, mode) {
         mode = typeof mode !== 'undefined' ? mode : 'entries';
         var barLeft = barPosition * (BAR_WIDTH + BAR_SPACE) + BAR_SPACE + AXES_OFFSET;
         var barHeight = maxBarPercent * MAX_BAR_HEIGHT;
+        if (displayMode === 'percentage') {
+            barHeight = MAX_BAR_HEIGHT;
+        }
         var canvas = document.getElementById('calorieGraph');
         var bar = {
             left: barLeft,
@@ -143,7 +146,7 @@ var CalorieGrapher = function() {
         for (var i=startIndex; i<data.food_days.length; i++) {
             var day = data.food_days[i];
             var calories = day.total_calories;
-            drawBar(day, calories/topCalories, i-startIndex, 'tags');
+            drawBar(day, calories/topCalories, i-startIndex, 'percentage', 'tags');
         }
     };
     
