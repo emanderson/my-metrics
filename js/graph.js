@@ -10,7 +10,8 @@ var CalorieGrapher = function() {
     var BAR_MODE_PERCENTAGE = 'percentage';
     
     var settings = {
-        barMode: BAR_MODE_PERCENTAGE
+        barMode: BAR_MODE_PERCENTAGE,
+        tagColors: {}
     };
     
     function clear() {
@@ -54,8 +55,6 @@ var CalorieGrapher = function() {
     var lastColor = 0;
     
     var bars = [];
-    var tags = [];
-    var tag_colors = {};
     
     function drawBarPart(context, left, top, right, bottom, color) {
         if (typeof color === 'undefined') {
@@ -110,8 +109,8 @@ var CalorieGrapher = function() {
                     bottom -= height;
                 }
             } else if (mode === 'tags') {
-                for (var i=0; i<tags.length; i++) {
-                    var tag_id = tags[i].id;
+                for (var i=0; i<graphData.tags.length; i++) {
+                    var tag_id = graphData.tags[i].id;
                     var entries_for_tag = bar.day.by_tag[tag_id];
                     if (entries_for_tag !== undefined) {
                         var tag_calories = 0;
@@ -120,7 +119,7 @@ var CalorieGrapher = function() {
                         }
                         height = tag_calories/bar.day.total_calories*barHeight;
                         top -= height;
-                        drawBarPart(context, bar.left, top, bar.right, bottom, tag_colors[tag_id]);
+                        drawBarPart(context, bar.left, top, bar.right, bottom, settings.tagColors[tag_id]);
                         bars.push({
                             left: bar.left,
                             top: top,
@@ -129,7 +128,7 @@ var CalorieGrapher = function() {
                             day: bar.day,
                             entry: {
                                 calories: tag_calories,
-                                name: tags[i].name
+                                name: graphData.tags[i].name
                             }
                         });
                         bottom -= height;
@@ -186,11 +185,10 @@ var CalorieGrapher = function() {
         graphData = data;
         
         for (var i=0; i<graphData.tags.length; i++) {
-            tags.push(graphData.tags[i]);
-            tag_colors[graphData.tags[i].id] = BAR_COLORS[i%BAR_COLORS.length];
+            settings.tagColors[graphData.tags[i].id] = BAR_COLORS[i%BAR_COLORS.length];
         }
-        tags.push({name: 'None', id:0})
-        tag_colors[0] = BAR_COLORS[graphData.tags.length%BAR_COLORS.length]
+        graphData.tags.push({name: 'None', id:0})
+        settings.tagColors[0] = BAR_COLORS[graphData.tags.length-1%BAR_COLORS.length]
     
         graphData.topCalories = 0;
         graphData.startIndex = 0;
@@ -256,6 +254,11 @@ var CalorieGrapher = function() {
         },
         setBarMode: function(mode) {
             settings.barMode = mode;
+        },
+        
+        tagColorKey: function() {
+            // TODO: fancier response with names, etc. to make key
+            return settings.tagColors;
         }
     };
 }();
