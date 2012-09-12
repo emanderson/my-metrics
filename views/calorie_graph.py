@@ -66,13 +66,15 @@ def food_entry_list(request):
 def lose_it_upload_form(request):
     return {'title': 'Upload LoseIt Data'}
 
-@view_config(route_name='lose-it-upload')
+@view_config(route_name='lose-it-upload', renderer='ignored_food_entries.html')
 def lose_it_upload(request):
     session = Session()
     
     # TODO: duplicate detection
     input_file = request.POST['file'].file
     reader = LoseItDataReader(input_file)
+    existing_for_date = {}
+    ignored = []
     for entry in reader:
         existing_food = session.query(Food).filter_by(name=entry.name).all()
         food = None
@@ -81,8 +83,17 @@ def lose_it_upload(request):
             session.add(food)
         else:
             food = existing_food[0]
-        new_entry = FoodEntry(food, entry.calories, entry.date)
-        session.add(new_entry)
+        if not entry.date in existing_for_date:
+            existing_entries = session.query(FoodEntry).filter_by(date=entry.date).all()
+            existing_for_date[entry.date] = existing_entries
+        if existing_for_date[entry.date]:
+            ignored.append(entry)   
+        else:
+            new_entry = FoodEntry(food, entry.calories, entry.date)
+            session.add(new_entry)
     
     session.commit()
-    return HTTPFound('/food_entry/lose_it_upload_form')
+    if ignored:
+        return {'title': 'Existing Data Not Imported', 'ignored': ignored}
+    else:
+        return HTTPFound('/food_entry/lose_it_upload_form')

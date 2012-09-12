@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+    <link rel='stylesheet' type='text/css' href='/css/entries.css' />
+{% endblock %}
+
+{% block page_content %}
+    <p>The following entries were ignored because data for their dates was still already present:</p>
+
+    <table>
+        <tr>
+            <th>Date</th>
+            <th class="foodNames">Name</th>
+            <th class="calories">Calories</th>
+        </tr>
+        {% for entry in ignored %}
+            <tr>
+                <td>{{ entry.date }}</td>
+                <td>{{ entry.name }}</td>
+                <td class="calories">{{ entry.calories }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
