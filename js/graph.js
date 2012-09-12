@@ -123,39 +123,12 @@ var CalorieGrapher = function() {
         }    
     };
     
-    function drawFetchedData(data) {
-        for (var i=0; i<data.tags.length; i++) {
-            tags.push(data.tags[i]);
-            tag_colors[data.tags[i].id] = barColors[i%barColors.length];
-        }
-        tags.push({name: 'None', id:0})
-        tag_colors[0] = barColors[data.tags.length%barColors.length]
-    
-        var topCalories = 0;
-        var startIndex = 0;
-        if (data.food_days.length > 14) {
-            startIndex = data.food_days.length-14;
-        }
-        for (var i=startIndex; i<data.food_days.length; i++) {
-            var day = data.food_days[i];
-            var calories = day.total_calories;
-            if (topCalories < calories) {
-                topCalories = calories;
-            }
-        }
-        for (var i=startIndex; i<data.food_days.length; i++) {
-            var day = data.food_days[i];
+    function drawData() {
+        for (var i=startIndex; i<calorieData.food_days.length; i++) {
+            var day = calorieData.food_days[i];
             var calories = day.total_calories;
             drawBar(day, calories/topCalories, i-startIndex, 'percentage', 'tags');
         }
-    };
-    
-    function drawData() {
-        $.ajax({
-            url: '/graph/data',
-            dataType: 'json',
-            success: drawFetchedData
-        });
     };
     
     var mouseOver = null;
@@ -176,7 +149,6 @@ var CalorieGrapher = function() {
             $('#pageContent').append('<div id="graphMouseOver" class="graphMouseOver"></div>');
             mouseOver = $('#graphMouseOver');
         }
-        //mouseOver.text(bar.day.date + ': ' + bar.day.total_calories);
         mouseOver.html('<p>' + bar.day.date + '</p>' + 
             '<p>' + bar.entry.name + ': ' + bar.entry.calories + '</p>');
         mouseOver.css('left', event.pageX);
@@ -190,6 +162,39 @@ var CalorieGrapher = function() {
         }
     };
     
+    var calorieData;
+    var topCalories;
+    var startIndex;
+    
+    function saveData(data) {
+        calorieData = data;
+        
+        for (var i=0; i<calorieData.tags.length; i++) {
+            tags.push(calorieData.tags[i]);
+            tag_colors[calorieData.tags[i].id] = barColors[i%barColors.length];
+        }
+        tags.push({name: 'None', id:0})
+        tag_colors[0] = barColors[calorieData.tags.length%barColors.length]
+    
+        topCalories = 0;
+        startIndex = 0;
+        if (calorieData.food_days.length > 14) {
+            startIndex = calorieData.food_days.length-14;
+        }
+        for (var i=startIndex; i<calorieData.food_days.length; i++) {
+            var day = calorieData.food_days[i];
+            var calories = day.total_calories;
+            if (topCalories < calories) {
+                topCalories = calories;
+            }
+        }
+    };
+    
+    function redrawAll() {
+        drawAxes();
+        drawData();
+    };
+    
     function addMouseHandling() {
         $('#calorieGraph').on('mousemove', function(event) {
             var bar = barAt(event.offsetX, event.offsetY);
@@ -200,16 +205,34 @@ var CalorieGrapher = function() {
             }
         });
     };
+    
+    function initialize(data) {
+        saveData(data);
+        redrawAll();
+        addMouseHandling();
+    };
+    
+    function fetchData(callback) {
+        $.ajax({
+            url: '/graph/data',
+            dataType: 'json',
+            success: callback
+        });
+    };
 
     return {
-        graph : function() {
+        loadData: function() {
+            fetchData(initialize);
+        },
+        draw : function() {
             drawAxes();
             drawData();
+            // TODO: different name for wrapping function or placement 
             addMouseHandling();
         }
     };
 }();
 
 $(document).ready(function() {
-    CalorieGrapher.graph();
+    CalorieGrapher.loadData();
 });
