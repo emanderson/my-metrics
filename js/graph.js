@@ -36,10 +36,14 @@ var CalorieGrapher = function() {
     var lastColor = 0;
     
     var bars = [];
+    var tags = [];
+    var tag_colors = {};
     
-    function drawBarPart(context, left, top, right, bottom) {
-        var color = barColors[lastColor];
-        lastColor = (lastColor + 1) % barColors.length;
+    function drawBarPart(context, left, top, right, bottom, color) {
+        if (typeof color === 'undefined') {
+            color = barColors[lastColor];
+            lastColor = (lastColor + 1) % barColors.length;
+        }
         context.fillStyle = color;
         context.strokeColor = color;
         context.beginPath()
@@ -51,7 +55,8 @@ var CalorieGrapher = function() {
         context.fill();
     };
     
-    function drawBar(dayData, maxBarPercent, barPosition) {
+    function drawBar(dayData, maxBarPercent, barPosition, mode) {
+        mode = typeof mode !== 'undefined' ? mode : 'entries';
         var barLeft = barPosition * (BAR_WIDTH + BAR_SPACE) + BAR_SPACE + AXES_OFFSET;
         var barHeight = maxBarPercent * MAX_BAR_HEIGHT;
         var canvas = document.getElementById('calorieGraph');
@@ -67,20 +72,48 @@ var CalorieGrapher = function() {
             var bottom = bar.bottom;
             var top = bar.bottom;
             var height = 0;
-            for (var i=0; i<bar.day.entries.length; i++) {
-                var entry = bar.day.entries[i];
-                height = entry.calories/bar.day.total_calories*barHeight;
-                top -= height;
-                drawBarPart(context, bar.left, top, bar.right, bottom);
-                bars.push({
-                    left: bar.left,
-                    top: top,
-                    right: bar.right,
-                    bottom: bottom,
-                    day: bar.day,
-                    entry: entry
-                });
-                bottom -= height;
+            if (mode === 'entries') {
+                for (var i=0; i<bar.day.entries.length; i++) {
+                    var entry = bar.day.entries[i];
+                    height = entry.calories/bar.day.total_calories*barHeight;
+                    top -= height;
+                    drawBarPart(context, bar.left, top, bar.right, bottom);
+                    bars.push({
+                        left: bar.left,
+                        top: top,
+                        right: bar.right,
+                        bottom: bottom,
+                        day: bar.day,
+                        entry: entry
+                    });
+                    bottom -= height;
+                }
+            } else if (mode === 'tags') {
+                for (var i=0; i<tags.length; i++) {
+                    var tag_id = tags[i].id;
+                    var entries_for_tag = bar.day.by_tag[tag_id];
+                    if (entries_for_tag !== undefined) {
+                        var tag_calories = 0;
+                        for (var j=0; j<entries_for_tag.length; j++) {
+                            tag_calories += entries_for_tag[j].calories;
+                        }
+                        height = tag_calories/bar.day.total_calories*barHeight;
+                        top -= height;
+                        drawBarPart(context, bar.left, top, bar.right, bottom, tag_colors[tag_id]);
+                        bars.push({
+                            left: bar.left,
+                            top: top,
+                            right: bar.right,
+                            bottom: bottom,
+                            day: bar.day,
+                            entry: {
+                                calories: tag_calories,
+                                name: tags[i].name
+                            }
+                        });
+                        bottom -= height;
+                    }
+                }
             }
         } else {
             console.log('No canvas support');
@@ -88,6 +121,11 @@ var CalorieGrapher = function() {
     };
     
     function drawFetchedData(data) {
+        for (var i=0; i<data.tags.length; i++) {
+            tags.push(data.tags[i]);
+            tag_colors[data.tags[i].id] = barColors[i%barColors.length];
+        }
+    
         var topCalories = 0;
         for (var i=0; i<data.food_days.length; i++) {
             var day = data.food_days[i];
@@ -99,7 +137,7 @@ var CalorieGrapher = function() {
         for (var i=0; i<data.food_days.length; i++) {
             var day = data.food_days[i];
             var calories = day.total_calories;
-            drawBar(day, calories/topCalories, i);
+            drawBar(day, calories/topCalories, i, 'tags');
         }
     };
     
@@ -143,7 +181,7 @@ var CalorieGrapher = function() {
         }
     };
     
-    function addMouseOver() {
+    function addMouseHandling() {
         $('#calorieGraph').on('mousemove', function(event) {
             var bar = barAt(event.offsetX, event.offsetY);
             if (bar) {
@@ -158,7 +196,7 @@ var CalorieGrapher = function() {
         graph : function() {
             drawAxes();
             drawData();
-            addMouseOver();
+            addMouseHandling();
         }
     };
 }();

@@ -6,10 +6,20 @@ class FoodDay(object):
     def total_calories(self):
         return sum(map(lambda x: x.calories, self.food_entries))
     
+    def entries_by_tag(self):
+        by_tag = {}
+        for entry in self.food_entries:
+            #TODO: handle untagged foods or multiple tags
+            tag = entry.food.food_tags[0]
+            by_tag.setdefault(tag.id, [])
+            by_tag[tag.id].append(entry.to_dict())
+        return by_tag
+    
     def to_dict(self):
         return {
             'date': self.date.strftime('%Y%m%d'),
             'entries': map(lambda x: x.to_dict(), self.food_entries),
+            'by_tag': self.entries_by_tag(),
             'total_calories': self.total_calories()
         }
         

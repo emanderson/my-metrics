@@ -8,6 +8,7 @@ from pyramid.httpexceptions import HTTPFound
 
 from tables.food import Food
 from tables.food_entry import FoodEntry
+from tables.food_tag import FoodTag
 from tables import Session
 from utils.lose_it_data_reader import LoseItDataReader
 from utils.food_day import FoodDay
@@ -25,8 +26,9 @@ def calorie_graph_data(request):
     session = Session()
     food_entries = session.query(FoodEntry).order_by(FoodEntry.date)
     food_days = FoodDay.group_days(food_entries)
+    tags = session.query(FoodTag).order_by(FoodTag.id)
     session.close()
-    return {'food_days': map(lambda x: x.to_dict(), food_days)}
+    return {'food_days': map(lambda x: x.to_dict(), food_days), 'tags': map(lambda x: x.to_dict(), tags)}
 
 @view_config(route_name='food-entry-add-form', renderer='food_entry_add.html')
 def food_entry_add_form(request):
