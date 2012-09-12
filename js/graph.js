@@ -28,6 +28,7 @@ var CalorieGrapher = function() {
         if (canvas.getContext) {
             var context = canvas.getContext('2d');
             context.strokeColor = '#000000';
+            context.beginPath();
             context.moveTo(AXES_OFFSET, AXES_OFFSET);
             context.lineTo(AXES_OFFSET, AXES_HEIGHT);
             context.lineTo(AXES_WIDTH, AXES_HEIGHT);
