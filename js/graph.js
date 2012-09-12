@@ -5,6 +5,16 @@ var CalorieGrapher = function() {
     var MAX_BAR_HEIGHT = 380;
     var BAR_WIDTH = 35;
     var BAR_SPACE = 15;
+    
+    function clear() {
+        var canvas = document.getElementById('calorieGraph');
+        if (canvas.getContext) {
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, 800, 400);
+        } else {
+            console.log('No canvas support');
+        }
+    };
 
     function drawAxes() {
         var canvas = document.getElementById('calorieGraph');
@@ -20,7 +30,7 @@ var CalorieGrapher = function() {
         }    
     };
     
-    var barColors = [
+    var BAR_COLORS = [
         '#474ff4',
         '#f447d8',
         '#dc6740',
@@ -41,8 +51,8 @@ var CalorieGrapher = function() {
     
     function drawBarPart(context, left, top, right, bottom, color) {
         if (typeof color === 'undefined') {
-            color = barColors[lastColor];
-            lastColor = (lastColor + 1) % barColors.length;
+            color = BAR_COLORS[lastColor];
+            lastColor = (lastColor + 1) % BAR_COLORS.length;
         }
         context.fillStyle = color;
         context.strokeColor = color;
@@ -124,10 +134,10 @@ var CalorieGrapher = function() {
     };
     
     function drawData() {
-        for (var i=startIndex; i<calorieData.food_days.length; i++) {
-            var day = calorieData.food_days[i];
+        for (var i=graphData.startIndex; i<graphData.food_days.length; i++) {
+            var day = graphData.food_days[i];
             var calories = day.total_calories;
-            drawBar(day, calories/topCalories, i-startIndex, 'percentage', 'tags');
+            drawBar(day, calories/graphData.topCalories, i-graphData.startIndex, 'percentage', 'tags');
         }
     };
     
@@ -162,35 +172,34 @@ var CalorieGrapher = function() {
         }
     };
     
-    var calorieData;
-    var topCalories;
-    var startIndex;
+    var graphData;
     
     function saveData(data) {
-        calorieData = data;
+        graphData = data;
         
-        for (var i=0; i<calorieData.tags.length; i++) {
-            tags.push(calorieData.tags[i]);
-            tag_colors[calorieData.tags[i].id] = barColors[i%barColors.length];
+        for (var i=0; i<graphData.tags.length; i++) {
+            tags.push(graphData.tags[i]);
+            tag_colors[graphData.tags[i].id] = BAR_COLORS[i%BAR_COLORS.length];
         }
         tags.push({name: 'None', id:0})
-        tag_colors[0] = barColors[calorieData.tags.length%barColors.length]
+        tag_colors[0] = BAR_COLORS[graphData.tags.length%BAR_COLORS.length]
     
-        topCalories = 0;
-        startIndex = 0;
-        if (calorieData.food_days.length > 14) {
-            startIndex = calorieData.food_days.length-14;
+        graphData.topCalories = 0;
+        graphData.startIndex = 0;
+        if (graphData.food_days.length > 14) {
+            graphData.startIndex = graphData.food_days.length-14;
         }
-        for (var i=startIndex; i<calorieData.food_days.length; i++) {
-            var day = calorieData.food_days[i];
+        for (var i=graphData.startIndex; i<graphData.food_days.length; i++) {
+            var day = graphData.food_days[i];
             var calories = day.total_calories;
-            if (topCalories < calories) {
-                topCalories = calories;
+            if (graphData.topCalories < calories) {
+                graphData.topCalories = calories;
             }
         }
     };
     
     function redrawAll() {
+        clear();
         drawAxes();
         drawData();
     };
