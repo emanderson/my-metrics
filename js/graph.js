@@ -256,9 +256,15 @@ var CalorieGrapher = function() {
             settings.barMode = mode;
         },
         
+        colorChoices: function() {
+            return BAR_COLORS;
+        },
         tagColorKey: function() {
             // TODO: fancier response with names, etc. to make key
             return settings.tagColors;
+        },
+        setTagColor: function(tag_id, newColor) {
+            settings.tagColors[tag_id] = newColor;
         }
     };
 }();
