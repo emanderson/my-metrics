@@ -10,9 +10,13 @@ class FoodDay(object):
         by_tag = {}
         for entry in self.food_entries:
             #TODO: handle untagged foods or multiple tags
-            tag = entry.food.food_tags[0]
-            by_tag.setdefault(tag.id, [])
-            by_tag[tag.id].append(entry.to_dict())
+            if entry.food.food_tags:
+                tag = entry.food.food_tags[0]
+                by_tag.setdefault(tag.id, [])
+                by_tag[tag.id].append(entry.to_dict())
+            else:
+                by_tag.setdefault(0, [])
+                by_tag[0].append(entry.to_dict())
         return by_tag
     
     def to_dict(self):

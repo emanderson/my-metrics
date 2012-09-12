@@ -125,19 +125,25 @@ var CalorieGrapher = function() {
             tags.push(data.tags[i]);
             tag_colors[data.tags[i].id] = barColors[i%barColors.length];
         }
+        tags.push({name: 'None', id:0})
+        tag_colors[0] = barColors[data.tags.length%barColors.length]
     
         var topCalories = 0;
-        for (var i=0; i<data.food_days.length; i++) {
+        var startIndex = 0;
+        if (data.food_days.length > 14) {
+            startIndex = data.food_days.length-14;
+        }
+        for (var i=startIndex; i<data.food_days.length; i++) {
             var day = data.food_days[i];
             var calories = day.total_calories;
             if (topCalories < calories) {
                 topCalories = calories;
             }
         }
-        for (var i=0; i<data.food_days.length; i++) {
+        for (var i=startIndex; i<data.food_days.length; i++) {
             var day = data.food_days[i];
             var calories = day.total_calories;
-            drawBar(day, calories/topCalories, i, 'tags');
+            drawBar(day, calories/topCalories, i-startIndex, 'tags');
         }
     };
     

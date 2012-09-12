@@ -24,7 +24,7 @@ def calorie_graph(request):
 @view_config(route_name='calorie-graph-data', renderer='json')
 def calorie_graph_data(request):
     session = Session()
-    food_entries = session.query(FoodEntry).order_by(FoodEntry.date)
+    food_entries = session.query(FoodEntry).order_by(FoodEntry.date).all()
     food_days = FoodDay.group_days(food_entries)
     tags = session.query(FoodTag).order_by(FoodTag.id)
     session.close()
