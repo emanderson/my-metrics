@@ -6,6 +6,13 @@ var CalorieGrapher = function() {
     var BAR_WIDTH = 35;
     var BAR_SPACE = 15;
     
+    var BAR_MODE_ABSOLUTE = 'absolute';
+    var BAR_MODE_PERCENTAGE = 'percentage';
+    
+    var settings = {
+        barMode: BAR_MODE_PERCENTAGE
+    };
+    
     function clear() {
         var canvas = document.getElementById('calorieGraph');
         if (canvas.getContext) {
@@ -69,7 +76,7 @@ var CalorieGrapher = function() {
         mode = typeof mode !== 'undefined' ? mode : 'entries';
         var barLeft = barPosition * (BAR_WIDTH + BAR_SPACE) + BAR_SPACE + AXES_OFFSET;
         var barHeight = maxBarPercent * MAX_BAR_HEIGHT;
-        if (displayMode === 'percentage') {
+        if (settings.barMode === BAR_MODE_PERCENTAGE) {
             barHeight = MAX_BAR_HEIGHT;
         }
         var canvas = document.getElementById('calorieGraph');
@@ -137,7 +144,7 @@ var CalorieGrapher = function() {
         for (var i=graphData.startIndex; i<graphData.food_days.length; i++) {
             var day = graphData.food_days[i];
             var calories = day.total_calories;
-            drawBar(day, calories/graphData.topCalories, i-graphData.startIndex, 'percentage', 'tags');
+            drawBar(day, calories/graphData.topCalories, i-graphData.startIndex, BAR_MODE_ABSOLUTE, 'tags');
         }
     };
     
@@ -230,18 +237,43 @@ var CalorieGrapher = function() {
     };
 
     return {
-        loadData: function() {
+        initialLoad: function() {
             fetchData(initialize);
         },
-        draw : function() {
-            drawAxes();
-            drawData();
-            // TODO: different name for wrapping function or placement 
-            addMouseHandling();
+        redraw: function() {
+            redrawAll();
+        },
+        
+        barModeOptions: function() {
+            return [
+                BAR_MODE_ABSOLUTE,
+                BAR_MODE_PERCENTAGE
+            ];
+        },
+        getBarMode: function() {
+            return settings.barMode;
+        },
+        setBarMode: function(mode) {
+            settings.barMode = mode;
         }
     };
 }();
 
 $(document).ready(function() {
-    CalorieGrapher.loadData();
+    CalorieGrapher.initialLoad();
+    
+    var barModeSelector = $('select[name="barMode"]');
+    for (var i=0; i<CalorieGrapher.barModeOptions().length; i++) {
+        var mode = CalorieGrapher.barModeOptions()[i];
+        var option = $('<option value="' + mode + '">' + mode + '</option>')[0];
+        if (mode === CalorieGrapher.getBarMode()) {
+            option = $('<option value="' + mode + '" selected="selected">' + mode + '</option>')[0];
+        }
+        barModeSelector[0].options.add(option);
+    }
+    barModeSelector.on('change', function() {
+        var choice = this.options[this.selectedIndex].value;
+        CalorieGrapher.setBarMode(choice);
+        CalorieGrapher.redraw();
+    });
 });
