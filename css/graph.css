@@ -1,5 +1,9 @@
 /* GRAPH */
 
+canvas {
+    display: block;
+}
+
 .graphMouseOver {
     position: absolute;
     border: 1px solid black;

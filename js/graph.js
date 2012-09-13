@@ -272,6 +272,7 @@ var CalorieGrapher = function() {
 $(document).ready(function() {
     CalorieGrapher.initialLoad();
     
+    $('#calorieGraph').after('<select name="barMode">');
     var barModeSelector = $('select[name="barMode"]');
     for (var i=0; i<CalorieGrapher.barModeOptions().length; i++) {
         var mode = CalorieGrapher.barModeOptions()[i];
