@@ -221,10 +221,49 @@ var CalorieGrapher = function() {
         });
     };
     
+    function addBarModeSelector() {
+        $('#calorieGraph').after('<select name="barMode">');
+        var barModeSelector = $('select[name="barMode"]');
+        for (var i=0; i<CalorieGrapher.barModeOptions().length; i++) {
+            var mode = CalorieGrapher.barModeOptions()[i];
+            var option = $('<option value="' + mode + '">' + mode + '</option>')[0];
+            if (mode === CalorieGrapher.getBarMode()) {
+                option = $('<option value="' + mode + '" selected="selected">' + mode + '</option>')[0];
+            }
+            barModeSelector[0].options.add(option);
+        }
+        barModeSelector.on('change', function() {
+            var choice = this.options[this.selectedIndex].value;
+            CalorieGrapher.setBarMode(choice);
+            CalorieGrapher.redraw();
+        });
+    };
+    
+    function addKey() {
+        var barModeSelector = $('select[name="barMode"]');
+        barModeSelector.after('<div id="graphKey" class="graphKey">');
+        var graphKey = $('#graphKey');
+        graphKey.append('<h3>Key</h3>');
+        graphKey.append('<ul>');
+        var keyEntries = graphKey.find('ul');
+        for (var tagId in CalorieGrapher.tagColorKey()) {
+            if(CalorieGrapher.tagColorKey().hasOwnProperty(tagId)) {
+                keyEntries.append('<li>' + tagId + ': <span id="tagColor' + tagId + '">' + CalorieGrapher.tagColorKey()[tagId] + '</span></li>');
+                $('#tagColor' + tagId).css('color', CalorieGrapher.tagColorKey()[tagId]);
+            }
+        }
+    };
+    
+    function addControls() {
+        addBarModeSelector();
+        addKey();
+    };
+    
     function initialize(data) {
         saveData(data);
         redrawAll();
         addMouseHandling();
+        addControls();
     };
     
     function fetchData(callback) {
@@ -271,20 +310,4 @@ var CalorieGrapher = function() {
 
 $(document).ready(function() {
     CalorieGrapher.initialLoad();
-    
-    $('#calorieGraph').after('<select name="barMode">');
-    var barModeSelector = $('select[name="barMode"]');
-    for (var i=0; i<CalorieGrapher.barModeOptions().length; i++) {
-        var mode = CalorieGrapher.barModeOptions()[i];
-        var option = $('<option value="' + mode + '">' + mode + '</option>')[0];
-        if (mode === CalorieGrapher.getBarMode()) {
-            option = $('<option value="' + mode + '" selected="selected">' + mode + '</option>')[0];
-        }
-        barModeSelector[0].options.add(option);
-    }
-    barModeSelector.on('change', function() {
-        var choice = this.options[this.selectedIndex].value;
-        CalorieGrapher.setBarMode(choice);
-        CalorieGrapher.redraw();
-    });
 });
